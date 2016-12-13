@@ -3,7 +3,7 @@ Automatically run speed tests and tweet @ your ISP if they are garbage.
 ### Overview:  
 Python Script that utilizes selenium web driver to scrape speed test results and  
 tweet them at your ISP if they are below a given value.  
-###### This scripts compiles and logs:  
+###### This script compiles and logs:  
 * Download Speed in Mbps  
 * Upload Speed in Mbps  
 * Latency in msec  
