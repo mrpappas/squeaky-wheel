@@ -1,0 +1,20 @@
+{
+    "bandwidth":{
+        "download": "100",
+        "upload": "10"
+    },
+    "twitter":
+    {
+        "twitter_token": "",
+        "twitter_consumer_key": "",
+        "twitter_token_secret": "",
+        "twitter_consumer_secret": ""
+    },
+    "margin": ".7",
+    "isp": "@comcast",
+    "log":
+    {
+        "name": "squeaky-wheel.log"
+    }
+
+}
