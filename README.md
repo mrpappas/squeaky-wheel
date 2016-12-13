@@ -1,6 +1,6 @@
-# Squeaky-Wheel  
+# Squeaky-Wheel    
 Automatically run speed tests and tweet @ your ISP if they are garbage.  
-### Overview:
+### Overview:  
 Python Script that utilizes selenium web driver to scrape speed test results and  
 tweet them at your ISP if they are below a given value.  
 ###### This scripts compiles and logs:  
@@ -34,7 +34,7 @@ You will need your own API keys and access tokens from https://dev.twitter.com/.
 Config options can be set in **config.json**:  
 
 ###### Bandwidth  
-Set "download" to the download speed you are supposed to get (in Mbps).
+Set "download" to the download speed you are supposed to get (in Mbps).  
 Set "upload" to the upload speed you are supposed to get (in Mbps).  
 ###### Twitter
 Put in your Twitter API keys and Access tokens in the "twitter" section.  
@@ -44,21 +44,22 @@ Example: a margin of ".5" triggers an exception and tweet if speeds dip
 below 50% of promised speeds (".6" == 60%, etc).  
 **Must be between 0 and 1**.
 ###### ISP:  
-Set "isp" to your ISP's twitter handle.
-|ISP|Twitter Handle|  
-|---|---|  
-| Comcast | @comcast |
-|Comcast Support | @comcastcares |
-| Spectrum / Time Warner |  @GetSpectrum |
-|Verizon Fios|@verizonfios|
-|Verizon Support|@VerizonSupport|
-|AT&T|@ATT|
-|AT&T Support|@ATTCares|
-|CenturyLink|@CenturyLink|
-|CenturyLink Support|@CenturyLinkHelp|
-|Cox Communications|@CoxComm|
-|Cox Support|@CoxCommHelp|
-|Frontier|@FrontierCorp|  
+Set "isp" to your ISP's twitter handle.  
+
+| ISP | Twitter Handle |  
+| --- | --- |   
+| Comcast | @comcast |  
+| Comcast Support | @comcastcares |  
+| Spectrum / Time Warner |  @GetSpectrum |  
+| Verizon Fios | @verizonfios |  
+| Verizon Support | @VerizonSupport |  
+| AT&T | @ATT |  
+| AT&T Support | @ATTCares |  
+| CenturyLink | @CenturyLink |  
+| CenturyLink Support | @CenturyLinkHelp |  
+| Cox Communications | @CoxComm |  
+| Cox Support | @CoxCommHelp |  
+| Frontier | @FrontierCorp |  
 ###### Log:  
 Change the name / location of the .log file. Default location is local directory  
 
@@ -66,7 +67,7 @@ Change the name / location of the .log file. Default location is local directory
 `python3 ~/squeaky-wheel.py`  
 
 Set it as a cron job to run every x minutes/ hours:  
-`0,30 * * * * python3 ~/surfboard_log.py`  
+`0,30 * * * * python3 ~/squeaky-wheel.py`  
 
 ## Support:  
 Drop me a line - mrbenpappas@gmail.com  
