@@ -62,7 +62,13 @@ Set "isp" to your ISP's twitter handle.
 | Frontier | @FrontierCorp |  
 ###### Log:  
 Change the name / location of the .log file. Default location is local directory  
+###### Selenium Driver
+Change the driver type to one of either 'chrome' or 'firefox'.  Leaving
+ empty or not set will use Firefox.  If Firefox is not installed in the
+ expected location, set the driver binary to the full path to the
+ Firefox executable.  Ex `C:\Program Files (x86)\Mozilla Firefox\Firefox.exe`
 
+ You must have installed the proper driver. See the [downloads section here](http://www.seleniumhq.org/download/)
 ## Usage:  
 `python3 ~/squeaky-wheel.py`  
 
