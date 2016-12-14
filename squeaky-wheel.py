@@ -3,6 +3,7 @@ import json
 import time
 import tweepy
 import os.path
+from enum import Enum
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
@@ -11,6 +12,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
 CONIFG_FILENAME = "config.json"
+
+
+class DriverType(Enum):
+    driver = 0
+    firefox = 1
+    chrome = 2
 
 class Config(object):
 
@@ -30,12 +37,25 @@ class Config(object):
         twitter_consumer_secret = config["twitter"]["twitter_consumer_secret"]
 
         log = config["log"]["name"]
-        ff_binary_path = None
-        # If Firefox configuration exists and contains binary configuration
-        if "firefox" in config and "binary" in config["firefox"]:
-            # If the binary is a file somewhere, set it
-            if os.path.isfile(config["firefox"]["binary"]):
-                ff_binary_path = config["firefox"]["binary"]
+
+        driver_type = None
+        binary_path = None
+
+        # Check the configuration file for existence of a 'driver' field
+        if DriverType.driver.name in config:
+            # If the driver indicated is "firefox", set for that
+            if config[DriverType.driver.name]["type"] == DriverType.firefox.name:
+                driver_type = DriverType.firefox
+                binary_path = config[DriverType.driver.name]["binary"]
+                # Check if the provided binary path is valid
+                if len(binary_path) > 0 and not os.path.isfile(binary_path):
+                    # Invalid binary path, try to use the default
+                    driver_type = None
+                    binary_path = None
+            # Check for "chrome", no binary path needed
+            elif config[DriverType.driver.name]["type"] == DriverType.chrome.name:
+                driver_type = DriverType.chrome
+            # No driver, or other missing, try the default (which is Firefox right now)
 
         date = ("Data logged: {:%Y-%b-%d %H:%M:%S}".format(datetime.datetime.now()))
 
@@ -74,14 +94,28 @@ class SpeedTest(object):
         self.driver = None
         self.wait = None
         try:
-            if self.config.ff_binary_path is not None:
-                self.driver = webdriver.Firefox(firefox_binary=FirefoxBinary(config.ff_binary_path))
+            # Check for specific driver configured
+            if self.config.driver_type is not None:
+                # Create a Firefox driver
+                if self.config.driver_type == DriverType.firefox:
+                    # Point to a configured binary for FF
+                    if self.config.binary_path is not None:
+                        self.driver = webdriver.Firefox(firefox_binary=FirefoxBinary(config.binary_path))
+                    else:
+                        self.driver = webdriver.Firefox()
+                # Create a Chrome driver (no specific executable needed)
+                elif self.config.driver_type == DriverType.chrome:
+                        self.driver = webdriver.Chrome()
+            # No specific driver configured, try to use Firefox
             else:
                 self.driver = webdriver.Firefox()
             self.wait = WebDriverWait(self.driver, 5)
         except WebDriverException as e:
             self.log.write_to_log("Driver creation failed {:%Y-%b-%d %H:%M:%S}\n".format(datetime.datetime.now()))
-            self.log.write_to_log("\t" + str(e))
+            self.log.write_to_log(str(e))
+
+    def valid_driver(self):
+        return self.driver is not None
 
     def run_test(self):
         if self.driver is None or self.wait is None:
@@ -96,7 +130,6 @@ class SpeedTest(object):
 
         except TimeoutException:
             self.log.write_to_log("-- Button not found --")
-
 
     def get_data(self):
         if self.driver is None:
@@ -206,7 +239,8 @@ if __name__ == "__main__":
     # Run test
     speedtest.run_test()
     # instead of sleep could set a driver.wait
-    time.sleep(35)
+    if speedtest.valid_driver():
+        time.sleep(35)
     speedtest.get_data()
     twitter = Twitter()
     twitter.test_results()

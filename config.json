@@ -16,8 +16,9 @@
     {
         "name": "squeaky-wheel.log"
     },
-    "firefox":
+    "driver":
     {
-        "binary": "C:\\Program Files (x86)\\Mozilla Firefox\\Firefox.exe"
+        "type" : "firefox",
+        "binary" : ""
     }
 }
