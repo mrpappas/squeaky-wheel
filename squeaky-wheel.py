@@ -1,16 +1,20 @@
-import time, tweepy, datetime, json
+import datetime
+import json
+import time
+import tweepy
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 class Config(object):
 
     with open("config.json", "r") as j:
         config = json.load(j)
 
-#set download, upload, isp, twitter api data, and other defaults in config.json
+        # set download, upload, isp, twitter api data, and other defaults in config.json
 
         download = float(config["bandwidth"]["download"])
         upload = float(config["bandwidth"]["upload"])
@@ -28,19 +32,25 @@ class Config(object):
 
         def get_download(self):
             return self.download
+
         def get_upload(self):
             return self.upload
+
         def get_margin(self):
             return self.margin
+
         def get_isp(self):
             return self.isp
+
 
 class Log(object):
 
     config = Config()
+
     def write_to_log(self, input):
         with open(self.config.log, "a") as f:
             f.write(input)
+
 
 class SpeedTest(object):
 
@@ -54,7 +64,6 @@ class SpeedTest(object):
         driver = webdriver.Firefox()
         driver.wait = WebDriverWait(driver, 5)
         return driver
-
 
     def run_test(self, driver):
 
@@ -90,6 +99,7 @@ class SpeedTest(object):
         except TimeoutException:
             self.log.write_to_log("-- jitter not found --")
 
+
 class Twitter(object):
 
     log = Log()
@@ -103,9 +113,9 @@ class Twitter(object):
     try:
         api = tweepy.API(auth)
     except:
-        self.log.write_to_log("-- "+ config.date + " --\n"
+        self.log.write_to_log("-- " + config.date + " --\n"
                               "Twitter Auth failed \n"
-                              "-------------------- \n" )
+                              "-------------------- \n")
 
     def test_results(self):
 
@@ -118,29 +128,29 @@ class Twitter(object):
         speedtest_download = speedtest.download
         speedtest_upload = speedtest.upload
 
-        if (float(speedtest_download) < config_download * margin
-            or float(speedtest_upload) < config_upload * margin):
+        if (float(speedtest_download) < config_download * margin or
+                float(speedtest_upload) < config_upload * margin):
 
-            try:
+                try:
 
-                self.api.update_status(isp + " Hey what gives!  I pay for " +
-                                       str(config_download) + " Mbps download and " +
-                                       str(config_upload) + " Mbps upload. Why am I only getting " +
-                                       speedtest_download + " Mbps down and " +
-                                       speedtest_upload + " Mbps up?" )
+                    self.api.update_status(isp + " Hey what gives!  I pay for " +
+                                           str(config_download) + " Mbps download and " +
+                                           str(config_upload) + " Mbps upload. Why am I only getting " +
+                                           speedtest_download + " Mbps down and " +
+                                           speedtest_upload + " Mbps up?")
 
-                self.log.write_to_log("-- "+ config.date + " --\n"
-                                      "- ERROR: Bandwidth not in spec - \n"
-                                      "Download: " + speedtest_download + " Mbps \n"
-                                      "Upload: " + speedtest_upload + " Mbps \n"
-                                      "Latency: " + speedtest.latency + " msec round trip time \n"
-                                      "Jitter: " + speedtest.jitter + " msec \n"
-                                      "-------------------- \n")
+                    self.log.write_to_log("-- " + config.date + " --\n"
+                                          "- ERROR: Bandwidth not in spec - \n"
+                                          "Download: " + speedtest_download + " Mbps \n"
+                                          "Upload: " + speedtest_upload + " Mbps \n"
+                                          "Latency: " + speedtest.latency + " msec round trip time \n"
+                                          "Jitter: " + speedtest.jitter + " msec \n"
+                                          "-------------------- \n")
 
-            except:
-                self.log.write_to_log("-- "+ config.date + " --\n"
-                                 "Twitter post / logging failed \n"
-                                 "-------------------- \n" )
+                except:
+                    self.log.write_to_log("-- " + config.date + " --\n"
+                                          "Twitter post / logging failed \n"
+                                          "-------------------- \n")
 
         else:
             self.log.write_to_log("-- " + config.date + " --\n"
@@ -156,7 +166,7 @@ if __name__ == "__main__":
     speedtest = SpeedTest()
     driver = speedtest.init_driver()
     speedtest.run_test(driver)
-    #instead of sleep could set a driver.wait
+    # instead of sleep could set a driver.wait
     time.sleep(35)
     speedtest.get_data()
     driver.quit()
