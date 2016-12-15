@@ -19,6 +19,6 @@
     "driver":
     {
         "type" : "firefox",
-        "binary" : ""
+        "binary" : "/usr/bin/firefox"
     }
 }
