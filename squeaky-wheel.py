@@ -131,28 +131,17 @@ class SpeedTest(object):
         except TimeoutException:
             self.log.write_to_log("-- Button not found --")
 
-    def get_data(self):
+    def store_test_values(self):
         if self.driver is None:
             return
+
         try:
             self.upload = str(self.driver.find_element_by_id("upload-speed").text)
-        except TimeoutException:
-            self.log.write_to_log("-- upload not found --")
-
-        try:
             self.download = str(self.driver.find_element_by_id("download-speed").text)
-        except TimeoutException:
-            self.log.write_to_log("-- download not found --")
-
-        try:
             self.latency = self.driver.find_element_by_id("latency").text
-        except TimeoutException:
-            self.log.write_to_log("-- latency not found --")
-
-        try:
             self.jitter = self.driver.find_element_by_id("jitter").text
         except TimeoutException:
-            self.log.write_to_log("-- jitter not found --")
+            self.log.write_to_log("-- could not find test values --")
 
     def __del__(self):
         if self.driver is not None:
@@ -241,6 +230,6 @@ if __name__ == "__main__":
     # instead of sleep could set a driver.wait
     if speedtest.valid_driver():
         time.sleep(35)
-    speedtest.get_data()
+    speedtest.store_test_values()
     twitter = Twitter()
     twitter.test_results()
