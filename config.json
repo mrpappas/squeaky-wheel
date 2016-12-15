@@ -15,6 +15,10 @@
     "log":
     {
         "name": "squeaky-wheel.log"
+    },
+    "driver":
+    {
+        "type" : "firefox",
+        "binary" : ""
     }
-
 }
