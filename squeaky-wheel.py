@@ -227,7 +227,7 @@ class Twitter(object):
                                   "Download: " + speedtest_download + " Mbps \n"
                                   "Upload: " + speedtest_upload + " Mbps \n"
                                   "Latency: " + speedtest.latency + " msec round trip time \n"
-                                  "Jitter: " + speedtest.jitter + " msec \n"
+                                  "Jitter: " + speedtest.jitter + "\n"
                                   "-------------------- \n")
 
 
